@@ -1,0 +1,40 @@
+[
+  {
+    "header_column": "WDIR",
+    "source_uom": "degrees_true",
+    "target_obs": "wind_from_direction",
+    "target_uom": "degrees_true",
+    "s_order": 1
+  },
+  {
+    "header_column": "WSPD",
+    "source_uom": "m_s-1",
+    "target_obs": "wind_speed",
+    "target_uom": "m_s-1",
+    "s_order": 1
+  },
+  {
+    "header_column": "PRES",
+    "source_uom": "hPa",
+    "target_obs": "air_pressure",
+    "target_uom": "mb",
+    "s_order": 1
+  },
+  {
+    "header_column": "ATMP",
+    "source_uom": "celsius",
+    "target_obs": "air_temperature",
+    "target_uom": "celsius",
+    "s_order": 1
+  },
+  {
+    "header_column": "WTMP",
+    "source_uom": "celsius",
+    "target_obs": "water_temperature",
+    "target_uom": "celsius",
+    "s_order": 1
+  }
+]
+
+
+
