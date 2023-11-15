@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../../commonfiles/python')
+sys.path.append('../commonfiles/python')
 
 import logging
 from dataclasses import dataclass

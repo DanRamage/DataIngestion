@@ -7,7 +7,7 @@ import configparser
 import sys
 import time
 from datetime import datetime, timedelta
-sys.path.append('../../../commonfiles/python')
+sys.path.append('../../commonfiles/python')
 from dataclasses import dataclass
 import requests
 from ..base_data_ingest import BaseDataIngest

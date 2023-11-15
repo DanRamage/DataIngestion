@@ -6,7 +6,7 @@ import sys
 import time
 from datetime import datetime, timedelta
 import pandas as pd
-sys.path.append('../../../commonfiles/python')
+sys.path.append('../../commonfiles/python')
 from dataclasses import dataclass
 import requests
 from ..base_data_ingest import BaseDataIngest
