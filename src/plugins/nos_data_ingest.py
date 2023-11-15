@@ -1,6 +1,3 @@
-from dataclasses import dataclass
-from ..base_data_ingest import BaseDataIngest
-
 import logging
 import os
 import configparser
@@ -16,7 +13,6 @@ from xeniaSQLAlchemy import multi_obs
 from xenia_obs_map import obs_map, json_obs_map
 from MultiProcDataSaverV2 import MPDataSaverV2
 from multiprocessing import Queue, Process, current_process
-from string import Template
 
 NOSProducts = ["water_level", "hourly_height", "high_low", "daily_mean", "monthly_mean", "one_minute_water_level",
                "predictions", "datums", "air_gap", "air_temperature", "water_temperature", "wind", "air_pressure",
