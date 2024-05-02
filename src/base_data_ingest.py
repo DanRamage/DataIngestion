@@ -33,6 +33,7 @@ class BaseDataIngest:
         self._organization_name = ""
         self._organization_id = None
         return
+
     def __del__(self):
         if self._db is not None:
             self._db.disconnect()

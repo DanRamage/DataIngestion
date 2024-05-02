@@ -19,6 +19,7 @@ from multiprocessing import Queue, Process, current_process
 
 
 
+
 @dataclass
 class NDBCTextBase:
     def __init__(self):
@@ -352,6 +353,8 @@ class DataIngest(BaseDataIngest):
         platform_recs = self.get_platforms(self._organization_name)
         #Build a list of data files to try and download to process.
         for platform_rec in platform_recs:
+            self._logger.debug(f"Processing platform: {platform_rec.platform_handle}")
+
             platform_file_url = urllib.parse.urljoin(self._file_url, f"{platform_rec.short_name}.txt")
             #Get the max date current in DB for platform.
             max_data_rec = self._db.session.query(func.max(multi_obs.m_date))\

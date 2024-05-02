@@ -373,6 +373,7 @@ class DataIngest(BaseDataIngest):
         platform_recs = self.get_platforms(self._organization_name)
         #Build a list of data files to try and download to process.
         for platform_rec in platform_recs:
+            self._logger.debug(f"Processing platform: {platform_rec.platform_handle}")
             #Get the max date current in DB for platform.
             max_data_rec = self._db.session.query(func.max(multi_obs.m_date))\
                 .filter(multi_obs.platform_handle == platform_rec.platform_handle)\
