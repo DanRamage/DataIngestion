@@ -4,7 +4,11 @@ import configparser
 import sys
 import time
 from datetime import datetime, timedelta
-sys.path.append('./commonfiles/python')
+if 'DEBUG' not in os.environ:
+    sys.path.append('./commonfiles/python')
+else:
+    sys.path.append('../../commonfiles/python')
+
 from dataclasses import dataclass
 import requests
 from ..base_data_ingest import BaseDataIngest
@@ -214,8 +218,8 @@ def processing_function(**kwargs):
                 try:
                     end_date = datetime.utcnow()
                     start_date = start_date - timedelta(hours=2)
-                    start_datetime = start_date.strftime("%Y%m%d% %H:%M")
-                    end_datetime = end_date.strftime("%Y%m%d% %H:%M")
+                    start_datetime = start_date.strftime("%Y%m%d %H:%M")
+                    end_datetime = end_date.strftime("%Y%m%d %H:%M")
 
                     processed_wind = False
                     for xenia_obs_rec in json_obs:
@@ -308,7 +312,12 @@ class DataIngest(BaseDataIngest):
 
     def initialize(self, **kwargs):
         try:
-            ini_filename = os.path.join(self._plugin_path, f"{self._plugin_name}.ini")
+            if 'DEBUG' not in os.environ:
+                ini_name = f"{self._plugin_name}"
+            else:
+                ini_name = f"{self._plugin_name}_debug"
+
+            ini_filename = os.path.join(self._plugin_path, f"{ini_name}.ini")
             config_file = configparser.RawConfigParser()
             config_file.read(ini_filename)
 

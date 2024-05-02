@@ -6,7 +6,10 @@ import sys
 import time
 from datetime import datetime, timedelta
 import pandas as pd
-sys.path.append('./commonfiles/python')
+if 'DEBUG' not in os.environ:
+    sys.path.append('./commonfiles/python')
+else:
+    sys.path.append('../../commonfiles/python')
 from dataclasses import dataclass
 import requests
 from ..base_data_ingest import BaseDataIngest
@@ -225,7 +228,12 @@ class DataIngest(BaseDataIngest):
 
     def initialize(self, **kwargs):
         try:
-            ini_filename = os.path.join(self._plugin_path, f"{self._plugin_name}.ini")
+            if 'DEBUG' not in os.environ:
+                ini_name = f"{self._plugin_name}"
+            else:
+                ini_name = f"{self._plugin_name}_debug"
+
+            ini_filename = os.path.join(self._plugin_path, f"{ini_name}.ini")
             config_file = configparser.RawConfigParser()
             config_file.read(ini_filename)
 
