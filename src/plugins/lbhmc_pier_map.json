@@ -1,0 +1,123 @@
+[
+  {
+    "target_obs": "m_date",
+    "target_uom": null,
+    "source_uom": null,
+    "header_column": "Date/Time(EST5EDT)",
+    "s_order": null
+  },
+  {
+    "target_obs": "chl_concentration",
+    "header_column": "Bottom_chlorophyll(ug/L)",
+    "s_order": 2,
+    "source_uom": "ug_L-1",
+    "target_uom": "ug_L-1"
+  },
+  {
+  "target_obs": "depth",
+    "header_column": "Bottom_depth(m)",
+    "s_order": 2,
+    "source_uom": "m",
+    "target_uom": "m"
+  },
+  {
+    "target_obs": "oxygen_concentration",
+      "header_column": "Bottom_DO(mg/L)",
+      "s_order": 2,
+      "source_uom": "mg_L-1",
+      "target_uom": "mg_L-1"
+  },
+  {
+  "target_obs": "oxygen_concentration",
+    "header_column": "Bottom_%DO(%)",
+    "s_order": 2,
+    "source_uom": "percent",
+    "target_uom": "percent"
+  },
+  {
+  "target_obs": "ph",
+    "header_column": "Bottom_pH(SU)",
+    "s_order": 2,
+    "source_uom": "units",
+    "target_uom": "units"
+  },
+  {
+  "target_obs": "salinity",
+    "header_column": "Bottom_salinity(PSU)",
+    "s_order": 2,
+    "source_uom": "psu",
+    "target_uom": "psu"
+  },
+  {
+  "target_obs": "water_temperature",
+    "header_column": "Bottom_temperature(degF)",
+    "s_order": 2,
+    "source_uom": "fahrenheit",
+    "target_uom": "celsius"
+  },
+  {
+  "target_obs": "turbidity",
+    "header_column": "Bottom_turbidity(NTU)",
+    "s_order": 2,
+    "source_uom": "ntu",
+    "target_uom": "ntu"
+  },
+
+
+  {
+  "target_obs": "chl_concentration",
+    "header_column": "Surface_chlorophyll(ug/L)",
+    "s_order": 1,
+    "source_uom": "ug_L-1",
+    "target_uom": "ug_L-1"
+  },
+  {
+  "target_obs": "depth",
+    "header_column": "Surface_depth(m)",
+    "s_order": 1,
+    "source_uom": "m",
+    "target_uom": "m"
+  },
+  {
+  "target_obs": "oxygen_concentration",
+    "header_column": "Surface_DO(mg/L)",
+    "s_order": 1,
+    "source_uom": "mg_L-1",
+    "target_uom": "mg_L-1"
+  },
+  {
+    "target_obs": "oxygen_concentration",
+    "header_column":  "Surface_%DO(%)",
+    "s_order": 1,
+    "source_uom": "percent",
+    "target_uom": "percent"
+  },
+  {
+  "target_obs": "ph",
+    "header_column": "Surface_pH(SU)",
+    "s_order": 1,
+    "source_uom": "units",
+    "target_uom": "units"
+  },
+  {
+  "target_obs": "salinity",
+    "header_column": "Surface_salinity(PSU)",
+    "s_order": 1,
+    "source_uom": "psu",
+    "target_uom": "psu"
+  },
+  {
+  "target_obs": "water_temperature",
+    "header_column": "Surface_temperature(degF)",
+    "s_order": 1,
+    "source_uom": "fahrenheit",
+    "target_uom": "celsius"
+  },
+  {
+  "target_obs": "turbidity",
+    "header_column": "Surface_turbidity(NTU)",
+    "s_order": 1,
+    "source_uom": "ntu",
+    "target_uom": "ntu"
+  }
+]
