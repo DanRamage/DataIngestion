@@ -167,11 +167,16 @@ def processing_function(**kwargs):
 
         logger_config = logging_config
         # Each worker will set its own filename for the filehandler
-        base_filename = logger_config['handlers']['file_handler']['filename']
+        base_filename = "./mp_logger.log"
+        file_handler_name = [handler for handler in logger_config['handlers'] if 'file_handler' in handler]
+        if len(file_handler_name):
+            base_filename = logger_config['handlers'][file_handler_name[0]]['filename']
+
+        #base_filename = logger_config['handlers']['file_handler']['filename']
         filename_parts = os.path.split(base_filename)
         filename, ext = os.path.splitext(filename_parts[1])
         worker_filename = os.path.join(filename_parts[0], f"{filename}_{current_process().name.replace(':', '_')}{ext}")
-        logger_config['handlers']['file_handler']['filename'] = worker_filename
+        logger_config['handlers'][file_handler_name[0]]['filename'] = worker_filename
         logging.config.dictConfig(logger_config)
         logger = logging.getLogger()
         logger.debug(f"{current_process().name} starting data saver worker.")
