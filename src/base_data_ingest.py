@@ -14,7 +14,8 @@ class BaseDataIngest:
     def __init__(self, **kwargs):
         self._plugin_path = kwargs['module_path']
         self._plugin_name = self.__module__.split('.')[-1]
-        self._logger_name = kwargs.get('logger_name', f"data_ingest.{self._plugin_name}")
+        self._logger_name = kwargs.get('logger_name', self._plugin_name)
+        #self._logger_name = kwargs.get('logger_name', f"data_ingest.{self._plugin_name}")
         #self._logger = logging.getLogger(self._logger_name)
         self._output_queue = kwargs['output_queue']
 
@@ -98,20 +99,20 @@ class BaseDataIngest:
                     }
                 },
                 'handlers': {
-                    'stream': {
+                    f'stream_for_{self._plugin_name}': {
                         'class': 'logging.StreamHandler',
                         'formatter': f'formatter_for_{self._plugin_name}',
                         'level': logging.DEBUG
                     },
-                    'file_handler': {
+                    f'file_handler_for_{self._plugin_name}': {
                         'class': 'logging.handlers.RotatingFileHandler',
                         'filename': log_file,
                         'formatter': f'formatter_for_{self._plugin_name}',
                         'level': logging.DEBUG
                     }
                 },
-                'root': {
-                    'handlers': ['file_handler', 'stream'],
+                self._logger_name: {
+                    'handlers': [f'stream_for_{self._plugin_name}', f'file_handler_for_{self._plugin_name}'],
                     'level': logging.NOTSET,
                     'propagate': False
                 }
