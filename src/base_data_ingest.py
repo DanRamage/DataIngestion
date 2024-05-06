@@ -36,6 +36,9 @@ class BaseDataIngest:
         self._organization_id = None
         return
 
+    @property
+    def plugin_name(self):
+        return self._plugin_name
     def __del__(self):
         if self._db is not None:
             self._db.disconnect()
