@@ -15,7 +15,7 @@ class BaseDataIngest:
         self._plugin_path = kwargs['module_path']
         self._plugin_name = self.__module__.split('.')[-1]
         self._logger_name = kwargs.get('logger_name', f"data_ingest.{self._plugin_name}")
-        self._logger = logging.getLogger(self._logger_name)
+        #self._logger = logging.getLogger(self._logger_name)
         self._output_queue = kwargs['output_queue']
 
         #self._sqlite_file = kwargs.get("sqlite_file", None)
@@ -92,7 +92,7 @@ class BaseDataIngest:
                 'version': 1,
                 'disable_existing_loggers': False,
                 'formatters': {
-                    'f': {
+                    f'formatter_for_{self._plugin_name}': {
                         'format': "%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s",
                         'datefmt': '%Y-%m-%d %H:%M:%S'
                     }
@@ -100,13 +100,13 @@ class BaseDataIngest:
                 'handlers': {
                     'stream': {
                         'class': 'logging.StreamHandler',
-                        'formatter': 'f',
+                        'formatter': f'formatter_for_{self._plugin_name}',
                         'level': logging.DEBUG
                     },
                     'file_handler': {
                         'class': 'logging.handlers.RotatingFileHandler',
                         'filename': log_file,
-                        'formatter': 'f',
+                        'formatter': f'formatter_for_{self._plugin_name}',
                         'level': logging.DEBUG
                     }
                 },
