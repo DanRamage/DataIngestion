@@ -12,11 +12,11 @@ from xeniaSQLAlchemy import xeniaAlchemy, multi_obs, organization, platform
 @dataclass
 class BaseDataIngest:
     def __init__(self, **kwargs):
-        self._logger_name = kwargs.get('logger_name', '')
-        self._logger = logging.getLogger(self._logger_name)
-        self._output_queue = kwargs['output_queue']
         self._plugin_path = kwargs['module_path']
         self._plugin_name = self.__module__.split('.')[-1]
+        self._logger_name = kwargs.get('logger_name', f"data_ingest.{self._plugin_name}")
+        self._logger = logging.getLogger(self._logger_name)
+        self._output_queue = kwargs['output_queue']
 
         #self._sqlite_file = kwargs.get("sqlite_file", None)
         #self._db_user = kwargs.get("db_user", None)
