@@ -50,11 +50,11 @@ def main():
         plugin_class = getattr(plugin_modules[plugin]['module'], 'DataIngest')
         plugin_obj = plugin_class(module_path=plugin_modules[plugin]['module_path'],
                                   output_queue=output_queue)
-        logger.debug(f"Starting {plugin_obj.plugin_name}")
+        logger.debug(f"Starting plugin: {plugin_obj.plugin_name}")
         if plugin_obj.initialize():
             plugin_obj.process_data()
 
-        logger.debug(f"Finished {plugin_obj.plugin_name} in {time.time() - plugin_start_time}")
+        logger.debug(f"Finished plugin: {plugin_obj.plugin_name} in {time.time() - plugin_start_time}")
         plugin_cnt +=1
 
         logger.debug(f"Finished: {plugin_cnt} plugins in {time.time() - start_time}")
