@@ -48,9 +48,9 @@ def main():
     for plugin in plugin_modules:
         plugin_start_time = time.time()
         plugin_class = getattr(plugin_modules[plugin]['module'], 'DataIngest')
-        logger.debug(f"Starting {plugin_obj.plugin_name}")
         plugin_obj = plugin_class(module_path=plugin_modules[plugin]['module_path'],
                                   output_queue=output_queue)
+        logger.debug(f"Starting {plugin_obj.plugin_name}")
         if plugin_obj.initialize():
             plugin_obj.process_data()
 
