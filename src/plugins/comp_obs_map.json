@@ -1,0 +1,52 @@
+[
+  {
+    "header_column":"wind_velocity",
+    "source_uom": "m_s-1",
+    "target_obs": "wind_speed",
+    "target_uom": "m_s-1",
+    "s_order": 1
+  },
+  {
+  "header_column": "wind_from_direction",
+    "source_uom": "degrees_true",
+    "target_obs": "wind_from_direction",
+    "target_uom": "degrees_true",
+    "s_order": 1
+  },
+  {
+    "header_column": "air_temperature",
+    "source_uom": "celsius",
+    "target_obs": "air_temperature",
+    "s_order": 1,
+    "target_uom": "celsius"
+  },
+  {
+    "header_column": "sea_water_practical_salinity",
+    "source_uom": "psu",
+    "target_obs": "salinity",
+    "s_order": 1,
+    "target_uom": "psu"
+  },
+  {
+    "header_column": "air_pressure",
+    "source_uom": "mb",
+    "target_obs": "air_pressure",
+    "s_order": 1,
+    "target_uom": "mb"
+  },
+  {
+    "header_column": "relative_humidity",
+    "source_uom": "percent",
+    "target_obs": "relative_humidity",
+    "s_order": 1,
+    "target_uom": "percent"
+  },
+  {
+    "header_column": "sea_water_temperature",
+    "source_uom": "celsius",
+    "target_obs": "water_temperature",
+    "s_order": 1,
+    "target_uom": "celsius"
+  }
+
+]

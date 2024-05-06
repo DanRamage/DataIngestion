@@ -204,7 +204,7 @@ def processing_function(**kwargs):
                     end_datetime = end_date.strftime('%Y-%m-%dT%H:%M:%S')
 
                     processed_wind = False
-                    api = CORMPApi()
+                    api = CORMPApi(base_url=rest_base_url)
 
                     org, platform_name, platform_type = platform_handle.split('.')
 
@@ -219,24 +219,25 @@ def processing_function(**kwargs):
                         sensor_id = xenia_obs_rec.sensor_id
                         m_type_id = xenia_obs_rec.m_type_id
                         parameter_data = platform_data.get_parameter_data(xenia_obs_rec.source_obs)
-                        for data_rec in parameter_data:
-                            try:
-                                value = float(data_rec['values'])
-                            except TypeError as e:
-                                logger.exception(e)
-                            else:
-                                obs_rec = multi_obs(row_entry_date=row_entry_date.strftime("%Y-%m-%dT%H:%M:%S"),
-                                                    m_date=data_rec['times'],
-                                                    platform_handle=platform_handle,
-                                                    sensor_id=sensor_id,
-                                                    m_type_id=m_type_id,
-                                                    m_lon=platform_info['geometry'][0],
-                                                    m_lat=platform_info['geometry'][1],
-                                                    m_value=value
-                                                    )
-                                logger.debug(f"{platform_handle} queueing obs: {xenia_obs_rec.source_obs} "
-                                             f"datetime: {obs_rec.m_date} value: {obs_rec.m_value}")
-                                output_queue.put(obs_rec)
+                        if parameter_data is not None:
+                            for data_rec in parameter_data:
+                                try:
+                                    value = float(data_rec['values'])
+                                except TypeError as e:
+                                    logger.exception(e)
+                                else:
+                                    obs_rec = multi_obs(row_entry_date=row_entry_date.strftime("%Y-%m-%dT%H:%M:%S"),
+                                                        m_date=data_rec['times'],
+                                                        platform_handle=platform_handle,
+                                                        sensor_id=sensor_id,
+                                                        m_type_id=m_type_id,
+                                                        m_lon=platform_info['geometry'][0],
+                                                        m_lat=platform_info['geometry'][1],
+                                                        m_value=value
+                                                        )
+                                    logger.debug(f"{platform_handle} queueing obs: {xenia_obs_rec.source_obs} "
+                                                 f"datetime: {obs_rec.m_date} value: {obs_rec.m_value}")
+                                    output_queue.put(obs_rec)
                 except Exception as e:
                     logger.exception(e)
             else:
