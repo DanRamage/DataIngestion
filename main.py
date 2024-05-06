@@ -43,8 +43,10 @@ def main():
 
     output_queue = multiprocessing.Queue()
 
+    plugin_cnt = 0
+    start_time = time.time()
     for plugin in plugin_modules:
-        start_time = time.time()
+        plugin_start_time = time.time()
         plugin_class = getattr(plugin_modules[plugin]['module'], 'DataIngest')
         logger.debug(f"Starting {plugin_obj.plugin_name}")
         plugin_obj = plugin_class(module_path=plugin_modules[plugin]['module_path'],
@@ -52,7 +54,11 @@ def main():
         if plugin_obj.initialize():
             plugin_obj.process_data()
 
-        logger.debug(f"Finished {plugin_obj.plugin_name} in {time.time() - start_time}")
+        logger.debug(f"Finished {plugin_obj.plugin_name} in {time.time() - plugin_start_time}")
+        plugin_cnt +=1
+
+        logger.debug(f"Finished: {plugin_cnt} plugins in {time.time() - start_time}")
+
     return
 
 if __name__ == "__main__":
