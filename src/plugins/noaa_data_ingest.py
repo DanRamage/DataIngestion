@@ -27,6 +27,7 @@ from multiprocessing import Queue, Process, current_process
 class NDBCTextBase:
     def __init__(self):
         self._logger = logging.getLogger()
+        self._download_file = ""
 
     def get_file(self, ndbc_file_url, download_directory):
         try:
@@ -356,6 +357,11 @@ class DataIngest(BaseDataIngest):
             raise e
     def process_data(self, **kwargs):
         self._logger.info(f"process_data for {self._organization_name}")
+
+        #Check to make sure our download directory exists, and if not we create it.
+        if not os.path.exists(self._download_directory):
+            self._logger.debug(f"Creating download directory: {self._download_directory}")
+            os.makedirs(self._download_directory, exist_ok=True)
         self._data_saver.start()
         #Get the NDBC platforms we wnt to get data for.
         platform_recs = self.get_platforms(self._organization_name)
