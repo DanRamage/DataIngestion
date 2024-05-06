@@ -179,48 +179,11 @@ class DataIngest(BaseDataIngest):
 
     def initialize(self, **kwargs):
         try:
-            if 'DEBUG' not in os.environ:
-                ini_name = f"{self._plugin_name}"
-            else:
-                ini_name = f"{self._plugin_name}_debug"
+            super().initialize(**kwargs)
 
-            self._ini_file = os.path.join(self._plugin_path, f"{ini_name}.ini")
             config_file = configparser.RawConfigParser()
             config_file.read(self._ini_file)
 
-            log_file = config_file.get('logging', 'log_file')
-
-            self._logging_config = {
-                'version': 1,
-                'disable_existing_loggers': False,
-                'formatters': {
-                    'f': {
-                        'format': "%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s",
-                        'datefmt': '%Y-%m-%d %H:%M:%S'
-                    }
-                },
-                'handlers': {
-                    'stream': {
-                        'class': 'logging.StreamHandler',
-                        'formatter': 'f',
-                        'level': logging.DEBUG
-                    },
-                    'file_handler': {
-                        'class': 'logging.handlers.RotatingFileHandler',
-                        'filename': log_file,
-                        'formatter': 'f',
-                        'level': logging.DEBUG
-                    }
-                },
-                'root': {
-                    'handlers': ['file_handler', 'stream'],
-                    'level': logging.NOTSET,
-                    'propagate': False
-                }
-            }
-            logging.config.dictConfig(self._logging_config)
-            self._logger = logging.getLogger()
-            self._logger.info("Logging configured.")
             self._base_url = config_file.get('settings', 'base_url')
             self._station_list = config_file.get('settings', 'station_list').split(",")
             self._units_conversion_file = config_file.get('settings', 'units_conversion')
