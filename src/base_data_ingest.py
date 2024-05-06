@@ -117,7 +117,7 @@ class BaseDataIngest:
                 }
             }
             logging.config.dictConfig(self._logging_config)
-            self._logger = logging.getLogger()
+            self._logger = logging.getLogger(self._logger_name)
             self._logger.info("Logging configured.")
         except Exception as e:
             raise e
