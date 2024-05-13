@@ -126,7 +126,8 @@ def processing_function(**kwargs):
     process_files = True
     try:
         start_time = time.time()
-        logging_config = kwargs['logging_config']
+        #logging_config = kwargs['logging_config']
+        base_logfile_name = kwargs['base_logfile_name']
         input_queue = kwargs["input_queue"]
         output_queue = kwargs["output_queue"]
         download_directory = kwargs["download_directory"]
@@ -137,6 +138,59 @@ def processing_function(**kwargs):
         db_name = kwargs["db_name"]
         db_connection_type = kwargs["db_connection_type"]
 
+
+        filename_parts = os.path.split(base_logfile_name)
+        filename, ext = os.path.splitext(filename_parts[1])
+
+        worker_filename = os.path.join(filename_parts[0], f"{filename}_{current_process().name.replace(':', '_')}{ext}")
+
+        logging_config = {
+            'version': 1,
+            'disable_existing_loggers': False,
+            'formatters': {
+                'default_for_ndbc_processing_function': {
+                    'format': "%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s",
+                    'datefmt': '%Y-%m-%d %H:%M:%S'
+                }
+            },
+            'handlers': {
+                'stream': {
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'default_for_ndbc_processing_function',
+                    'level': logging.DEBUG
+                },
+                'file_handler': {
+                    'class': 'logging.handlers.RotatingFileHandler',
+                    'filename': worker_filename,
+                    'formatter': 'default_for_ndbc_processing_function',
+                    'level': logging.DEBUG
+                }
+            },
+            'loggers': {
+                'ndbc_processing_function': {
+                    'handlers': ['stream', 'file_handler'],
+                    'level': logging.DEBUG
+                    #'propagate': True
+                }
+            }
+        }
+        logging.config.dictConfig(logging_config)
+        logger = logging.getLogger("ndbc_processing_function")
+        logger.setLevel(logging.DEBUG)
+        '''
+        logger = logging.getLogger("ndbc_processing_function")
+        logger.setLevel(logging.DEBUG)
+        formatter = logging.Formatter("%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s")
+        fh = logging.handlers.RotatingFileHandler(worker_filename)
+        ch = logging.StreamHandler()
+        fh.setLevel(logging.DEBUG)
+        ch.setLevel(logging.DEBUG)
+        fh.setFormatter(formatter)
+        ch.setFormatter(formatter)
+        logger.addHandler(fh)
+        logger.addHandler(ch)
+        '''
+        '''
         logger_config = logging_config
         # Each worker will set its own filename for the filehandler
         base_filename = "./mp_logger.log"
@@ -144,16 +198,14 @@ def processing_function(**kwargs):
         if len(file_handler_name):
             base_filename = logger_config['handlers'][file_handler_name[0]]['filename']
 
-        #base_filename = logger_config['handlers']['file_handler']['filename']
         filename_parts = os.path.split(base_filename)
         filename, ext = os.path.splitext(filename_parts[1])
         worker_filename = os.path.join(filename_parts[0], f"{filename}_{current_process().name.replace(':', '_')}{ext}")
         logger_config['handlers'][file_handler_name[0]]['filename'] = worker_filename
         logging.config.dictConfig(logger_config)
-        logger = logging.getLogger()
-        logger.debug(f"{current_process().name} starting data saver worker.")
+        '''
 
-        logger = logging.getLogger()
+        #logger = logging.getLogger("ndbc_processing_function")
         logger.debug(f"{current_process().name} starting run.")
 
         while(process_files):
@@ -266,53 +318,6 @@ class DataIngest(BaseDataIngest):
             raise e
         return False
 
-    '''
-    def processing_function(self):
-        process_files = True
-        try:
-            while(process_files):
-                row_entry_date = datetime.now()
-                platform_info = self._input_queue.get()
-                platform_file = platform_info['url']
-                platform_handle = platform_info['platform_handle']
-                geometry = platform_info['geometry']
-                if platform_info is not None:
-                    json_obs = json_obs_map()
-                    json_obs.load_json_mapping(self._obs_mapping_file)
-                    json_obs.build_db_mappings(platform_handle=platform_handle,
-                                                db_connectionstring=self._db_connection_type,
-                                               db_user=self._db_user,
-                                               db_password=self._db_pwd,
-                                               db_host=self._db_host,
-                                               db_name=self._db_name)
-
-                    ndbc_met = NDBCMet()
-                    ndbc_met.process(platform_file, self._download_directory)
-                    for met_rec in ndbc_met:
-                        save_record = True
-                        #Let's only process the records from the start_date forward.
-                        if self._start_date is not None:
-                            if met_rec.date_time < self._start_date:
-                                save_record = False
-                        if save_record:
-                            for xenia_obs_rec in json_obs:
-                                value, units = getattr(met_rec, xenia_obs_rec.source_obs)
-                                obs_rec = multi_obs(row_entry_date=row_entry_date.strftime("%Y-%m-%dT%H:%M:%S"),
-                                                      m_date=met_rec.date_time,
-                                                      platform_handle=platform_handle,
-                                                      sensor_id=xenia_obs_rec.sensor_id,
-                                                      m_type_id=xenia_obs_rec.m_type_id,
-                                                      m_lon=geometry[0],
-                                                      m_lat=geometry[1],
-                                                      m_value=value
-                                                      )
-                                self._data_queue.put(obs_rec)
-                else:
-                    break
-        except Exception as e:
-            e
-        return
-    '''
     def setup_database(self, ini_file):
         try:
             db_config_file = configparser.RawConfigParser()
@@ -360,6 +365,7 @@ class DataIngest(BaseDataIngest):
 
         processes = []
         process_args = {
+            "base_logfile_name": self._log_file,
             "logging_config": self._logging_config,
             "input_queue": self._input_queue,
             "output_queue": self._data_queue,
