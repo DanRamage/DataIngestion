@@ -123,7 +123,8 @@ class NOSApi:
                     try:
                         value = float(rec['g'])
                     except ValueError as e:
-                        e
+                        self._logger(f"Platform: {json_req['metadata']['id']} Obs: {json_req['metadata']['name']} "
+                                     f"{date_time} Value: {value} is not a float.")
                     else:
                         data_rec = NOSDataRecord(json_req['metadata']['id'],
                                                  json_req['metadata']['name'],
@@ -137,7 +138,8 @@ class NOSApi:
                     try:
                         value = float(rec['d'])
                     except ValueError as e:
-                        e
+                        self._logger(f"Platform: {json_req['metadata']['id']} Obs: {json_req['metadata']['name']} "
+                                     f"{date_time} Value: {value} is not a float.")
                     else:
                         data_rec = NOSDataRecord(json_req['metadata']['id'],
                                                  json_req['metadata']['name'],
@@ -153,7 +155,8 @@ class NOSApi:
                     try:
                         value = float(rec['v'])
                     except ValueError as e:
-                        e
+                        self._logger(f"Platform: {json_req['metadata']['id']} Obs: {json_req['metadata']['name']} "
+                                     f"{date_time} Value: {value} is not a float.")
                     else:
                         data_rec = NOSDataRecord(json_req['metadata']['id'],
                                                  json_req['metadata']['name'],
@@ -186,7 +189,8 @@ def processing_function(**kwargs):
 
         filename_parts = os.path.split(base_logfile_name)
         filename, ext = os.path.splitext(filename_parts[1])
-        worker_filename = os.path.join(filename_parts[0], f"{filename}_{current_process().name.replace(':', '_')}{ext}")
+        worker_filename = os.path.join(filename_parts[0],
+                                       f"nos_{filename}_{current_process().name.replace(':', '_')}{ext}")
         logging_config = {
             'version': 1,
             'disable_existing_loggers': False,
@@ -271,10 +275,6 @@ def processing_function(**kwargs):
                                             units='metric',
                                             format='json'
                                             )
-                                logger.info(f"Platform query : {platform_name_parts[1]} "
-                                            f"{start_datetime} to {end_datetime} Product: {xenia_obs_rec.source_obs}"
-                                            f"returned: {nos_req.record_count()} records.")
-
                             for rec in nos_req:
                                 #We have to look up the obs_info again since some products like wind
                                 #return multiple records(wind_speed, wind_gust, wind_direction).

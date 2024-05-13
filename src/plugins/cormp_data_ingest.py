@@ -158,7 +158,8 @@ def processing_function(**kwargs):
     process_files = True
     start_time = time.time()
     try:
-        logging_config = kwargs['logging_config']
+        base_logfile_name = kwargs['base_logfile_name']
+
         input_queue = kwargs["input_queue"]
         output_queue = kwargs["output_queue"]
         rest_base_url = kwargs["rest_base_url"]
@@ -169,23 +170,45 @@ def processing_function(**kwargs):
         db_name = kwargs["db_name"]
         db_connection_type = kwargs["db_connection_type"]
 
-        logger_config = logging_config
-        # Each worker will set its own filename for the filehandler
-        base_filename = "./mp_logger.log"
-        file_handler_name = [handler for handler in logger_config['handlers'] if 'file_handler' in handler]
-        if len(file_handler_name):
-            base_filename = logger_config['handlers'][file_handler_name[0]]['filename']
-
-        #base_filename = logger_config['handlers']['file_handler']['filename']
-        filename_parts = os.path.split(base_filename)
+        filename_parts = os.path.split(base_logfile_name)
         filename, ext = os.path.splitext(filename_parts[1])
-        worker_filename = os.path.join(filename_parts[0], f"{filename}_{current_process().name.replace(':', '_')}{ext}")
-        logger_config['handlers'][file_handler_name[0]]['filename'] = worker_filename
-        logging.config.dictConfig(logger_config)
-        logger = logging.getLogger()
-        logger.debug(f"{current_process().name} starting data saver worker.")
 
-        logger = logging.getLogger()
+        worker_filename = os.path.join(filename_parts[0],
+                                       f"cormp_{filename}_{current_process().name.replace(':', '_')}{ext}")
+
+        logging_config = {
+            'version': 1,
+            'disable_existing_loggers': False,
+            'formatters': {
+                'default_for_cormp_processing_function': {
+                    'format': "%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s",
+                    'datefmt': '%Y-%m-%d %H:%M:%S'
+                }
+            },
+            'handlers': {
+                'stream': {
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'default_for_cormp_processing_function',
+                    'level': logging.DEBUG
+                },
+                'file_handler': {
+                    'class': 'logging.handlers.RotatingFileHandler',
+                    'filename': worker_filename,
+                    'formatter': 'default_for_cormp_processing_function',
+                    'level': logging.DEBUG
+                }
+            },
+            'loggers': {
+                'cormp_processing_function': {
+                    'handlers': ['stream', 'file_handler'],
+                    'level': logging.DEBUG
+                    #'propagate': True
+                }
+            }
+        }
+        logging.config.dictConfig(logging_config)
+        logger = logging.getLogger("cormp_processing_function")
+        logger.setLevel(logging.DEBUG)
         logger.debug(f"{current_process().name} starting run.")
 
         while(process_files):

@@ -15,16 +15,8 @@ class BaseDataIngest:
         self._plugin_path = kwargs['module_path']
         self._plugin_name = self.__module__.split('.')[-1]
         self._logger_name = kwargs.get('logger_name', self._plugin_name)
-        #self._logger_name = kwargs.get('logger_name', f"data_ingest.{self._plugin_name}")
-        #self._logger = logging.getLogger(self._logger_name)
         self._output_queue = kwargs['output_queue']
-
-        #self._sqlite_file = kwargs.get("sqlite_file", None)
-        #self._db_user = kwargs.get("db_user", None)
-        #self._db_pwd = kwargs.get("db_pwd", None)
-        #self._db_host = kwargs.get("db_host", None)
-        #self._db_name = kwargs.get("db_name", None)
-        #self._connection_type = kwargs.get("db_connection_type", None)
+        self._log_file = "./log_file.log"
         self._sqlite_file = None
         self._db_user = None
         self._db_pwd = None
@@ -87,7 +79,7 @@ class BaseDataIngest:
             config_file = configparser.RawConfigParser()
             config_file.read(self._ini_file)
 
-            log_file = config_file.get('logging', 'log_file')
+            self._log_file = config_file.get('logging', 'log_file')
 
             self._logging_config = {
                 'version': 1,
@@ -106,7 +98,7 @@ class BaseDataIngest:
                     },
                     f'file_handler_for_{self._plugin_name}': {
                         'class': 'logging.handlers.RotatingFileHandler',
-                        'filename': log_file,
+                        'filename': self._log_file,
                         'formatter': f'formatter_for_{self._plugin_name}',
                         'level': logging.DEBUG
                     }

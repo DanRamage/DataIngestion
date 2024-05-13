@@ -142,7 +142,8 @@ def processing_function(**kwargs):
         filename_parts = os.path.split(base_logfile_name)
         filename, ext = os.path.splitext(filename_parts[1])
 
-        worker_filename = os.path.join(filename_parts[0], f"{filename}_{current_process().name.replace(':', '_')}{ext}")
+        worker_filename = os.path.join(filename_parts[0],
+                                       f"noaa_{filename}_{current_process().name.replace(':', '_')}{ext}")
 
         logging_config = {
             'version': 1,
