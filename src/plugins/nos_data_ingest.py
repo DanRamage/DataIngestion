@@ -194,7 +194,7 @@ def processing_function(**kwargs):
         filename_parts = os.path.split(base_filename)
         filename, ext = os.path.splitext(filename_parts[1])
         worker_filename = os.path.join(filename_parts[0], f"{filename}_{current_process().name.replace(':', '_')}{ext}")
-        logger_config['handlers']['file_handler']['filename'] = worker_filename
+        logger_config['handlers'][file_handler_name[0]]['filename'] = worker_filename
         logging.config.dictConfig(logger_config)
         logger = logging.getLogger()
         logger.debug(f"{current_process().name} starting data saver worker.")
