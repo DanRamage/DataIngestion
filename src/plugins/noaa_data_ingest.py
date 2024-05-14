@@ -248,9 +248,12 @@ def processing_function(**kwargs):
                                     try:
                                         value = float(value)
                                     except ValueError as e:
-                                        logger.error(f"Platform: {platform_handle} {met_rec.date_time} Obs: {xenia_obs_rec.source_obs} Value: {value} is not a number.")
+                                        logger.error(f"Platform: {platform_handle} {met_rec.date_time} "
+                                                     f"Obs: {xenia_obs_rec.source_obs} Value: {value} is not a number.")
                                         #logger.exception(e)
                                     else:
+                                        logger.debug(f"Platform: {platform_handle} {met_rec.date_time} "
+                                                     f"Obs: {xenia_obs_rec.source_obs} Value: {value}")
                                         obs_rec = multi_obs(row_entry_date=row_entry_date.strftime("%Y-%m-%dT%H:%M:%S"),
                                                             m_date=met_rec.date_time,
                                                             platform_handle=platform_handle,
