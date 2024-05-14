@@ -382,6 +382,7 @@ class DataIngest(BaseDataIngest):
 
         processes = []
         process_args = {
+            "base_logfile_name": self._log_file,
             "logging_config": self._logging_config,
             "input_queue": self._input_queue,
             "output_queue": self._data_queue,

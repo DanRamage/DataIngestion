@@ -253,7 +253,7 @@ def processing_function(**kwargs):
                                         #logger.exception(e)
                                     else:
                                         logger.debug(f"Platform: {platform_handle} {met_rec.date_time} "
-                                                     f"Obs: {xenia_obs_rec.source_obs} Value: {value}")
+                                                     f"Obs: {xenia_obs_rec.target_obs} Value: {value}")
                                         obs_rec = multi_obs(row_entry_date=row_entry_date.strftime("%Y-%m-%dT%H:%M:%S"),
                                                             m_date=met_rec.date_time,
                                                             platform_handle=platform_handle,
