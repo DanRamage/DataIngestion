@@ -237,42 +237,40 @@ def processing_function(**kwargs):
                             logger.debug(f"Processing row: {index} Record Date: {met_rec.date_time} "
                                          f"Start Date: {start_date}")
                         if met_rec:
-                            save_record = True
                             #Let's only process the records from the start_date forward.
                             if start_date is not None:
                                 if met_rec.date_time < start_date:
-                                    save_record = False
-                                    process_files = False
-                            if save_record:
-                                for xenia_obs_rec in json_obs:
-                                    value, units = getattr(met_rec, xenia_obs_rec.source_obs)
+                                    break
+                            for xenia_obs_rec in json_obs:
+                                value, units = getattr(met_rec, xenia_obs_rec.source_obs)
+                                try:
+                                    value = float(value)
+                                except ValueError as e:
+                                    logger.error(f"Platform: {platform_handle} {met_rec.date_time} "
+                                                 f"Obs: {xenia_obs_rec.source_obs} Value: {value} is not a number.")
+                                    #logger.exception(e)
+                                else:
+                                    logger.debug(f"Platform: {platform_handle} {met_rec.date_time} "
+                                                 f"Obs: {xenia_obs_rec.target_obs} Value: {value}")
+                                    obs_rec = multi_obs(row_entry_date=row_entry_date.strftime("%Y-%m-%dT%H:%M:%S"),
+                                                        m_date=met_rec.date_time,
+                                                        platform_handle=platform_handle,
+                                                        sensor_id=xenia_obs_rec.sensor_id,
+                                                        m_type_id=xenia_obs_rec.m_type_id,
+                                                        m_lon=geometry[0],
+                                                        m_lat=geometry[1],
+                                                        m_value=value
+                                                        )
                                     try:
-                                        value = float(value)
-                                    except ValueError as e:
-                                        logger.error(f"Platform: {platform_handle} {met_rec.date_time} "
-                                                     f"Obs: {xenia_obs_rec.source_obs} Value: {value} is not a number.")
-                                        #logger.exception(e)
-                                    else:
-                                        logger.debug(f"Platform: {platform_handle} {met_rec.date_time} "
-                                                     f"Obs: {xenia_obs_rec.target_obs} Value: {value}")
-                                        obs_rec = multi_obs(row_entry_date=row_entry_date.strftime("%Y-%m-%dT%H:%M:%S"),
-                                                            m_date=met_rec.date_time,
-                                                            platform_handle=platform_handle,
-                                                            sensor_id=xenia_obs_rec.sensor_id,
-                                                            m_type_id=xenia_obs_rec.m_type_id,
-                                                            m_lon=geometry[0],
-                                                            m_lat=geometry[1],
-                                                            m_value=value
-                                                            )
-                                        try:
-                                            output_queue.put(obs_rec)
-                                        except (queue.Empty, Exception) as e:
-                                            logger.debug("Queue full.")
+                                        output_queue.put(obs_rec)
+                                    except (queue.Empty, Exception) as e:
+                                        logger.debug("Queue full.")
                         else:
                             logger.error("met_rec is None")
             else:
                 logger.info(f"{current_process().name} end of input queue, terminating process. "
                             f"{time.time()-start_time} seconds.")
+                process_files = False
                 break
     except Exception as e:
         logger.exception(e)
