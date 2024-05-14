@@ -234,7 +234,8 @@ def processing_function(**kwargs):
                 if ndbc_met.process(platform_file, download_directory):
                     for index, met_rec in ndbc_met:
                         if index % 100:
-                            logger.debug(f"Processing row: {index}")
+                            logger.debug(f"Processing row: {index} Record Date: {met_rec.date_time} "
+                                         f"Start Date: {start_date}")
                         if met_rec:
                             save_record = True
                             #Let's only process the records from the start_date forward.
