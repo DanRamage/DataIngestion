@@ -361,6 +361,8 @@ class DataIngest(BaseDataIngest):
                 start_date = datetime.now() - timedelta(hours=72)
             else:
                 start_date = max_data_rec[0][0]
+            self._logger.debug(f"Platform: {platform_rec.platform_handle} Start Date: {start_date}")
+
             self._input_queue.put({"start_date": start_date,
                                    "url": platform_file_url,
                                    "platform_handle": platform_rec.platform_handle,
