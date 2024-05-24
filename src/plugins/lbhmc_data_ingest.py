@@ -26,8 +26,8 @@ from unitsConversion import uomconversionFunctions
 
 
 class LBHMCBase:
-    def __init__(self, ini_file: str, platform_name: str):
-        self._logger = logging.getLogger()
+    def __init__(self, ini_file: str, platform_name: str, logger_name: str):
+        self._logger = logging.getLogger(logger_name)
         self._ini_file = ini_file
         self._platform = platform_name
         self._download_file = ""
@@ -239,7 +239,7 @@ class DataIngest(BaseDataIngest):
 
         for station in self._station_list:
             self._logger.info(f"Processing: {station}")
-            lbhm_data = LBHMCBase(self._ini_file, station)
+            lbhm_data = LBHMCBase(self._ini_file, station, self._logger_name)
             # (self, db_connection_type, db_user, db_pwd, db_host, db_name):
             lbhm_data.initialize(self._db_connection_type, self._db_user, self._db_pwd, self._db_host, self._db_name)
             if lbhm_data.get_file(self._base_url, start_time, end_time, now_str):

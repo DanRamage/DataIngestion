@@ -80,7 +80,7 @@ class BaseDataIngest:
             config_file.read(self._ini_file)
 
             self._log_file = config_file.get('logging', 'log_file')
-
+            #We keep this for now, however we are not using the dictConfig anylonger.
             self._logging_config = {
                 'version': 1,
                 'disable_existing_loggers': False,
@@ -105,12 +105,26 @@ class BaseDataIngest:
                 },
                 self._logger_name: {
                     'handlers': [f'stream_for_{self._plugin_name}', f'file_handler_for_{self._plugin_name}'],
-                    'level': logging.NOTSET,
-                    'propagate': True
+                    'level': logging.DEBUG,
+                    'propagate': False
                 }
             }
+            '''
             logging.config.dictConfig(self._logging_config)
             self._logger = logging.getLogger(self._logger_name)
+            '''
+            self._logger = logging.getLogger(self._logger_name)
+            formatter = logging.Formatter("%(asctime)s,%(levelname)s,%(funcName)s,%(lineno)d,%(message)s")
+            fh = logging.handlers.RotatingFileHandler(self._log_file)
+            ch = logging.StreamHandler()
+            fh.setLevel(logging.DEBUG)
+            ch.setLevel(logging.DEBUG)
+            fh.setFormatter(formatter)
+            ch.setFormatter(formatter)
+            self._logger.addHandler(fh)
+            self._logger.addHandler(ch)
+
+            self._logger.setLevel(logging.DEBUG)
             self._logger.info("Logging configured.")
         except Exception as e:
             raise e
