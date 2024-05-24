@@ -102,7 +102,7 @@ class Platform:
         if self._data_records is not None:
             return self._data_records.get_parameter_data(parameter_name)
 class CORMPApi:
-    def __init__(self, base_url='http://services.cormp.org/data.php', logger_name: str):
+    def __init__(self, base_url='http://services.cormp.org/data.php', logger_name=""):
         self._base_url = base_url
         self._logger = logging.getLogger(logger_name)
         self._records = []

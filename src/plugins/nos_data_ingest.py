@@ -38,9 +38,9 @@ class NOSDataRecord:
         self.units = units
 
 class NOSApi:
-    def __init__(self, base_url='https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?'):
+    def __init__(self, base_url='https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?', logger_name=""):
         self._base_url = base_url
-        self._logger = logging.getLogger()
+        self._logger = logging.getLogger(logger_name)
         self._records = []
         return
     def __iter__(self):
@@ -262,7 +262,7 @@ def processing_function(**kwargs):
                                 else:
                                     do_request = False
 
-                            nos_req = NOSApi()
+                            nos_req = NOSApi(logger_name="nos_processing_function")
                             if do_request:
                                 logger.info(f"Platform query : {platform_name_parts[1]} "
                                             f"{start_datetime} to {end_datetime} Product: {xenia_obs_rec.source_obs}")
