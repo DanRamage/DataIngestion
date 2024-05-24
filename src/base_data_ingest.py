@@ -106,7 +106,7 @@ class BaseDataIngest:
                 self._logger_name: {
                     'handlers': [f'stream_for_{self._plugin_name}', f'file_handler_for_{self._plugin_name}'],
                     'level': logging.NOTSET,
-                    'propagate': False
+                    'propagate': True
                 }
             }
             logging.config.dictConfig(self._logging_config)
