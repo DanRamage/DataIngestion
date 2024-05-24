@@ -102,9 +102,9 @@ class Platform:
         if self._data_records is not None:
             return self._data_records.get_parameter_data(parameter_name)
 class CORMPApi:
-    def __init__(self, base_url='http://services.cormp.org/data.php'):
+    def __init__(self, base_url='http://services.cormp.org/data.php', logger_name: str):
         self._base_url = base_url
-        self._logger = logging.getLogger()
+        self._logger = logging.getLogger(logger_name)
         self._records = []
         return
     def __iter__(self):
@@ -236,7 +236,7 @@ def processing_function(**kwargs):
                     end_datetime = end_date.strftime('%Y-%m-%dT%H:%M:%S')
 
                     processed_wind = False
-                    api = CORMPApi(base_url=rest_base_url)
+                    api = CORMPApi(base_url=rest_base_url, logger_name="cormp_processing_function")
 
                     org, platform_name, platform_type = platform_handle.split('.')
 
