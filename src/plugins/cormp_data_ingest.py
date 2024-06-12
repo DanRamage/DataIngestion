@@ -102,7 +102,7 @@ class Platform:
         if self._data_records is not None:
             return self._data_records.get_parameter_data(parameter_name)
 class CORMPApi:
-    def __init__(self, base_url='http://services.cormp.org/data.php', logger_name=""):
+    def __init__(self, base_url='http://services.cormp.org/data.php', logger_name=" "):
         self._base_url = base_url
         self._logger = logging.getLogger(logger_name)
         self._records = []
@@ -323,7 +323,7 @@ class DataIngest(BaseDataIngest):
                                         db_host=self._db_host,
                                         db_name=self._db_name,
                                         db_connection_type=self._db_connection_type,
-                                        records_before_commit=10)
+                                        records_before_commit=1)
 
             return True
         except Exception as e:

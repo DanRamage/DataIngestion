@@ -65,7 +65,7 @@ class DataIngest(BaseDataIngest):
                                         db_host=self._db_host,
                                         db_name=self._db_name,
                                         db_connection_type=self._db_connection_type,
-                                        records_before_commit=10)
+                                        records_before_commit=1)
 
             return True
         except Exception as e:
