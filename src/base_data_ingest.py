@@ -100,7 +100,9 @@ class BaseDataIngest:
                         'class': 'logging.handlers.RotatingFileHandler',
                         'filename': self._log_file,
                         'formatter': f'formatter_for_{self._plugin_name}',
-                        'level': logging.DEBUG
+                        'level': logging.DEBUG,
+                        'maxBytes': 10000000,
+                        'backupCount': 5
                     }
                 },
                 self._logger_name: {
