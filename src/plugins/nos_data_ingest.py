@@ -210,7 +210,10 @@ def processing_function(**kwargs):
                     'class': 'logging.handlers.RotatingFileHandler',
                     'filename': worker_filename,
                     'formatter': 'default_for_nos_processing_function',
-                    'level': logging.DEBUG
+                    'level': logging.DEBUG,
+                    'maxBytes': 10000000,
+                    'backupCount': 5
+
                 }
             },
             'loggers': {
