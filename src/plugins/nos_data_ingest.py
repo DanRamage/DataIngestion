@@ -123,8 +123,8 @@ class NOSApi:
                     try:
                         value = float(rec['g'])
                     except ValueError as e:
-                        self._logger(f"Platform: {json_req['metadata']['id']} Obs: {json_req['metadata']['name']} "
-                                     f"{date_time} Value: {value} is not a float.")
+                        self._logger.error(f"Platform: {json_req['metadata']['id']} Obs: {json_req['metadata']['name']} "
+                                     f"{date_time} Value: {rec['g']} is not a float.")
                     else:
                         data_rec = NOSDataRecord(json_req['metadata']['id'],
                                                  json_req['metadata']['name'],
@@ -138,8 +138,8 @@ class NOSApi:
                     try:
                         value = float(rec['d'])
                     except ValueError as e:
-                        self._logger(f"Platform: {json_req['metadata']['id']} Obs: {json_req['metadata']['name']} "
-                                     f"{date_time} Value: {value} is not a float.")
+                        self._logger.error(f"Platform: {json_req['metadata']['id']} Obs: {json_req['metadata']['name']} "
+                                     f"{date_time} Value: {rec['d']} is not a float.")
                     else:
                         data_rec = NOSDataRecord(json_req['metadata']['id'],
                                                  json_req['metadata']['name'],
@@ -155,8 +155,8 @@ class NOSApi:
                     try:
                         value = float(rec['v'])
                     except ValueError as e:
-                        self._logger(f"Platform: {json_req['metadata']['id']} Obs: {json_req['metadata']['name']} "
-                                     f"{date_time} Value: {value} is not a float.")
+                        self._logger.error(f"Platform: {json_req['metadata']['id']} Obs: {json_req['metadata']['name']} "
+                                     f"{date_time} Value: {rec['v']} is not a float.")
                     else:
                         data_rec = NOSDataRecord(json_req['metadata']['id'],
                                                  json_req['metadata']['name'],
